@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>takumi_postman</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f7f4f0;
+    --ink: #182238;
+    --ink-soft: #6b7280;
+    --accent: #ef7d34;
+    --accent-soft: #fdeee0;
+    --line: #ecebe8;
+    --radius: 22px;
+    --shadow: 0 16px 40px rgba(24, 34, 56, 0.08);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+
+  /* nav */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .brand { font-weight: 800; font-size: 15px; letter-spacing: 0.3px; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 20px; }
+  nav .nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  nav .nav-links a:hover { color: var(--accent); }
+
+  @media (max-width: 480px) {
+    nav { padding: 14px 16px; }
+    nav .brand { font-size: 13px; }
+    nav .nav-links { gap: 12px; }
+    nav .nav-links a { font-size: 12px; }
+    nav .nav-links a:first-child { display: none; }
+  }
+
+  /* hero */
+  .hero {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 64px 24px 56px;
+    text-align: center;
+  }
+  .avatar {
+    width: 128px;
+    height: 128px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 4px solid #fff;
+    outline: 1px solid var(--line);
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+  .hero .handle {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .hero .bio {
+    margin: 20px auto 0;
+    max-width: 460px;
+    font-size: 14.5px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .cta:hover { transform: translateY(-1px); }
+  .cta.primary { background: var(--accent); color: #fff; }
+  .cta.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+
+  /* sections */
+  section.block {
+    padding: 56px 24px;
+    border-top: 1px solid var(--line);
+  }
+  section.block.alt { background: var(--bg-soft); }
+  .block-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .block h2 {
+    margin: 0 0 12px;
+    font-size: 21px;
+    font-weight: 800;
+  }
+  .block p.desc {
+    margin: 0 0 24px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    max-width: 460px;
+  }
+  .card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 22px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card .icon {
+    width: 46px;
+    height: 46px;
+    flex: none;
+    border-radius: 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card .icon svg { width: 22px; height: 22px; }
+  .card .text { flex: 1; }
+  .card .text .t1 { font-weight: 700; font-size: 15px; }
+  .card .text .t2 { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  .card .arrow { color: var(--ink-soft); font-size: 15px; }
+
+  footer {
+    padding: 40px 24px;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.3px;
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <span class="brand">takumi_postman</span>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#youtube">YouTube</a>
+      <a href="#x">X</a>
+      <a href="#contact">お便り</a>
+    </div>
+  </nav>
+
+  <div class="hero" id="about">
+    <div class="avatar"><img src="profile.jpg" alt="takumi_postman"></div>
+    <h1>takumi</h1>
+    <p class="handle">@takumi_postman</p>
+    <p class="bio">
+      特別なことは何もない毎日を、そのままカメラに収めています。<br>
+      晴れの日も、なんでもない日も。<br>
+      ゆるっと覗いていってもらえたら嬉しいです。
+    </p>
+    <div class="cta-row">
+      <a class="cta primary" href="https://youtube.com/@takumi_postman" target="_blank" rel="noopener">YouTubeを見る</a>
+      <a class="cta ghost" href="https://x.com/takumi_postman" target="_blank" rel="noopener">Xをフォロー</a>
+    </div>
+  </div>
+
+  <section class="block" id="youtube">
+    <div class="block-inner">
+      <span class="eyebrow">YOUTUBE</span>
+      <h2>日常vlog</h2>
+      <p class="desc">なんてことない一日の記録から、ちょっとした遠出まで。気ままに投稿しています。</p>
+      <a class="card" href="https://youtube.com/@takumi_postman" target="_blank" rel="noopener">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M22 12.3c0-2.1-.2-3.6-.2-3.6s-.2-1.3-.8-1.9c-.7-.8-1.6-.8-2-.8C15.9 5.7 12 5.7 12 5.7h0s-3.9 0-6.9.3c-.4 0-1.3 0-2 .8-.6.6-.8 1.9-.8 1.9S2 10.2 2 12.3v1.4c0 2.1.2 3.6.2 3.6s.2 1.3.8 1.9c.7.8 1.7.7 2.1.8 1.5.2 6.4.3 6.9.3 0 0 3.9 0 6.9-.3.4 0 1.3 0 2-.8.6-.6.8-1.9.8-1.9s.2-1.5.2-3.6v-1.4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.9 9.7l4.8 2.7-4.8 2.7V9.7z" fill="currentColor"/></svg>
+        </span>
+        <span class="text">
+          <div class="t1">YouTubeチャンネルへ</div>
+          <div class="t2">@takumi_postman</div>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block alt" id="x">
+    <div class="block-inner">
+      <span class="eyebrow">X (TWITTER)</span>
+      <h2>つぶやき</h2>
+      <p class="desc">動画にしないくらいの些細な出来事や、撮影の裏側はこちらでつぶやいています。</p>
+      <a class="card" href="https://x.com/takumi_postman" target="_blank" rel="noopener">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 4l7.2 9.6L4.4 20H6l6.1-5.6L17 20h3l-7.6-10.1L19.6 4H18l-5.7 5.2L7 4H4z" fill="currentColor"/></svg>
+        </span>
+        <span class="text">
+          <div class="t1">Xをフォローする</div>
+          <div class="t2">@takumi_postman</div>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="block-inner">
+      <span class="eyebrow">CONTACT</span>
+      <h2>お便り</h2>
+      <p class="desc">感想やリクエスト、コラボのご相談などはこちらのフォームからお気軽にどうぞ。</p>
+      <a class="card" href="otayori.html">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18v12H3V6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 6l9 7 9-7" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="text">
+          <div class="t1">お便りフォームを開く</div>
+          <div class="t2">感想・質問・コラボ相談など</div>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>© 2026 takumi_postman</footer>
+
+</body>
+</html>
