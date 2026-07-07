@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お便り・質問フォーム | takumi_postman</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f7f4f0;
+    --ink: #182238;
+    --ink-soft: #6b7280;
+    --accent: #ef7d34;
+    --accent-soft: #fdeee0;
+    --gold: #c9973a;
+    --gold-soft: #faf3e3;
+    --line: #ecebe8;
+    --radius: 22px;
+    --shadow: 0 16px 40px rgba(24, 34, 56, 0.08);
+    --danger: #e0574c;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-soft);
+    color: var(--ink);
+    font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .brand { font-weight: 800; font-size: 15px; letter-spacing: 0.3px; }
+  nav .brand a { text-decoration: none; }
+  nav .back {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  nav .back:hover { color: var(--accent); }
+
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+
+  .head h1 {
+    margin: 0 0 12px;
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .head h1 .yt-icon {
+    flex: none;
+    display: flex;
+    line-height: 0;
+  }
+  .head h1 .yt-icon svg { width: 34px; height: 34px; }
+  .head p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+  }
+
+  .notice {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .notice .icon {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .notice .icon svg { width: 20px; height: 20px; }
+  .notice p {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  form {
+    margin-top: 32px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px 28px;
+  }
+
+  .field { margin-bottom: 28px; }
+  .field:last-of-type { margin-bottom: 0; }
+
+  .field label.q {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .field label.q .opt {
+    font-weight: 500;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-left: 6px;
+  }
+  .field label.q .req {
+    color: var(--danger);
+    font-weight: 700;
+    margin-left: 4px;
+  }
+  .field .hint {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 1.5px solid transparent;
+    border-radius: 14px;
+    padding: 13px 15px;
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  input[type="text"]:focus, textarea:focus {
+    border-color: var(--accent);
+    background: #fff;
+  }
+  textarea {
+    min-height: 140px;
+    resize: vertical;
+    line-height: 1.7;
+  }
+  .counter {
+    text-align: right;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  .pill-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pill {
+    position: relative;
+    display: block;
+  }
+  .pill input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+  .pill .box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-soft);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .pill .dot {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: 1.5px solid #cfd3da;
+    background: #fff;
+    position: relative;
+    transition: border-color 0.15s ease;
+  }
+  .pill .dot::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: scale(0);
+    transition: transform 0.15s ease;
+  }
+  .pill input:checked + .box {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .pill input:checked + .box .dot {
+    border-color: var(--accent);
+  }
+  .pill input:checked + .box .dot::after {
+    transform: scale(1);
+  }
+  .pill input:focus-visible + .box {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .submit-row { margin-top: 36px; }
+  button.submit {
+    width: 100%;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+  }
+  button.submit:hover { transform: translateY(-1px); }
+  button.submit:disabled { opacity: 0.6; cursor: default; transform: none; }
+  .error-msg {
+    display: none;
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--danger);
+    text-align: center;
+  }
+
+  .done {
+    display: none;
+    text-align: center;
+    padding: 56px 28px;
+  }
+  .done .stamp {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .done .stamp svg { width: 30px; height: 30px; }
+  .done h2 { margin: 0 0 10px; font-size: 19px; font-weight: 800; }
+  .done p { margin: 0; font-size: 13.5px; line-height: 1.9; color: var(--ink-soft); }
+  .done .again {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 28px;
+    padding: 13px 30px;
+    border-radius: 999px;
+    border: 1.5px solid var(--accent);
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+  .done .again:hover {
+    background: var(--accent-soft);
+    transform: translateY(-1px);
+  }
+
+  footer {
+    padding: 40px 24px 20px;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.3px;
+  }
+
+  .confetti-piece {
+    position: fixed;
+    top: -24px;
+    left: 0;
+    width: 8px;
+    height: 14px;
+    pointer-events: none;
+    z-index: 999;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translateY(110vh) rotate(600deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <span class="brand"><a href="home.html">takumi_postman</a></span>
+    <a class="back" href="home.html">← もどる</a>
+  </nav>
+
+  <div class="wrap">
+    <div class="head">
+      <h1>
+        <a class="yt-icon" href="https://youtube.com/@takumi_postman" target="_blank" rel="noopener" aria-label="YouTubeチャンネルへ">
+          <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="7" fill="#FF0000"/><path d="M9.5 8.3l6 3.7-6 3.7V8.3z" fill="#fff"/></svg>
+        </a>
+        お便り・質問フォーム
+      </h1>
+      <p>いつも見てくれてありがとうございます。いただいたお便りや質問に動画の中で回答していきます。ちょっとした感想でも、聞いてみたい質問でも、気軽に送ってください。</p>
+    </div>
+
+    <div class="notice">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 003-3V7a3 3 0 10-6 0v5a3 3 0 003 3z" stroke="currentColor" stroke-width="1.6"/><path d="M19 11a7 7 0 01-14 0M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      <p>投稿内容は僕以外には見えません。</p>
+    </div>
+
+    <form id="otayori-form" autocomplete="off">
+
+      <div class="field">
+        <label class="q" for="nickname">呼び名（ニックネーム）<span class="opt">任意</span></label>
+        <p class="hint">動画内で呼んでほしい名前があれば教えてください。空欄の場合は「リスナーさん」として紹介します。</p>
+        <input type="text" id="nickname" name="nickname" maxlength="40" placeholder="例）たけちゃん">
+      </div>
+
+      <div class="field">
+        <label class="q">種類<span class="req">必須</span></label>
+        <div class="pill-group" id="category-group">
+          <label class="pill">
+            <input type="radio" name="category" value="質問" required>
+            <span class="box"><span class="dot"></span>質問</span>
+          </label>
+          <label class="pill">
+            <input type="radio" name="category" value="お便り・感想">
+            <span class="box"><span class="dot"></span>お便り・感想</span>
+          </label>
+          <label class="pill">
+            <input type="radio" name="category" value="やってほしい企画のリクエスト">
+            <span class="box"><span class="dot"></span>やってほしい企画のリクエスト</span>
+          </label>
+          <label class="pill">
+            <input type="radio" name="category" value="その他">
+            <span class="box"><span class="dot"></span>その他</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="q" for="content">内容<span class="req">必須</span></label>
+        <textarea id="content" name="content" maxlength="1000" required placeholder="例）撮影で使ってるカメラの機材構成が知りたいです！"></textarea>
+        <div class="counter"><span id="count">0</span> / 1000</div>
+      </div>
+
+      <div class="field">
+        <label class="q">動画で紹介してもいいですか？<span class="req">必須</span></label>
+        <div class="pill-group" id="shoutout-group">
+          <label class="pill">
+            <input type="radio" name="shoutout" value="名前ごと紹介OK" required>
+            <span class="box"><span class="dot"></span>名前ごと紹介OK</span>
+          </label>
+          <label class="pill">
+            <input type="radio" name="shoutout" value="匿名でなら紹介OK">
+            <span class="box"><span class="dot"></span>匿名でなら紹介OK</span>
+          </label>
+          <label class="pill">
+            <input type="radio" name="shoutout" value="内緒で読むだけでOK">
+            <span class="box"><span class="dot"></span>内緒で読むだけでOK</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="submit" id="submit-btn">送信する</button>
+        <p class="error-msg" id="error-msg">送信に失敗しました。時間をおいてもう一度お試しください。</p>
+      </div>
+    </form>
+
+    <div class="done" id="done-panel">
+      <div class="stamp">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h2>届きました！</h2>
+      <p>お便り・質問ありがとうございます。<br>動画の中で読ませてもらいますね。楽しみにしていてください。</p>
+      <button type="button" class="again" id="again-btn">もう一件送る</button>
+    </div>
+  </div>
+
+  <footer>© 2026 takumi_postman</footer>
+
+<script>
+  const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScFr5PbcLaAqPjV8YSWtjc32wB98tnXHOSFJ5Mb6zY1SnRcgg/formResponse";
+  const ENTRY_IDS = {
+    nickname: "entry.535399543",
+    category: "entry.509283987",
+    content: "entry.77937325",
+    shoutout: "entry.1440427579"
+  };
+
+  const form = document.getElementById("otayori-form");
+  const donePanel = document.getElementById("done-panel");
+  const submitBtn = document.getElementById("submit-btn");
+  const errorMsg = document.getElementById("error-msg");
+  const contentEl = document.getElementById("content");
+  const countEl = document.getElementById("count");
+
+  contentEl.addEventListener("input", () => {
+    countEl.textContent = contentEl.value.length;
+  });
+
+  function spawnConfetti() {
+    const colors = ["#ef7d34", "#f2a65a", "#ffd39c", "#c9973a", "#182238", "#7fe8d4"];
+    const count = 90;
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.className = "confetti-piece";
+      const size = 6 + Math.random() * 6;
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.width = size + "px";
+      el.style.height = size * 1.6 + "px";
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.borderRadius = Math.random() < 0.4 ? "50%" : "2px";
+      el.style.animationDuration = 2.6 + Math.random() * 1.6 + "s";
+      el.style.animationDelay = Math.random() * 0.35 + "s";
+      document.body.appendChild(el);
+      el.addEventListener("animationend", () => el.remove());
+    }
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    errorMsg.style.display = "none";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "送信中…";
+
+    const data = new FormData();
+    data.append(ENTRY_IDS.nickname, form.nickname.value);
+    data.append(ENTRY_IDS.category, form.category.value);
+    data.append(ENTRY_IDS.content, form.content.value);
+    data.append(ENTRY_IDS.shoutout, form.shoutout.value);
+
+    try {
+      await fetch(FORM_ACTION, {
+        method: "POST",
+        mode: "no-cors",
+        body: data
+      });
+      form.style.display = "none";
+      donePanel.style.display = "block";
+      spawnConfetti();
+    } catch (err) {
+      errorMsg.style.display = "block";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "送信する";
+    }
+  });
+
+  document.getElementById("again-btn").addEventListener("click", () => {
+    form.reset();
+    countEl.textContent = "0";
+    donePanel.style.display = "none";
+    form.style.display = "block";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "送信する";
+  });
+</script>
+
+</body>
+</html>
